@@ -17,9 +17,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from src.data.transforms import get_train_transforms, get_test_transforms, denormalize
 from src.data.dataset import load_dataset, get_class_distribution, get_sample_images, CLASS_NAMES
 
-st.set_page_config(page_title="EDA - Intel Image Classifier", page_icon="📊", layout="wide")
+st.set_page_config(page_title="EDA - Intel Image Classifier", page_icon="", layout="wide")
 
-st.title("📊 Keşifsel Veri Analizi (EDA)")
+st.title("Keşifsel Veri Analizi (EDA)")
 st.markdown("Veri setini tanıyalım: sınıf dağılımları, örnek görüntüler ve augmentation etkileri.")
 
 st.divider()
@@ -33,7 +33,7 @@ DATA_DIR = st.sidebar.text_input(
 
 if not os.path.exists(DATA_DIR):
     st.warning(
-        f"⚠️ Veri seti dizini bulunamadı: `{DATA_DIR}`\n\n"
+        f"Veri seti dizini bulunamadı: `{DATA_DIR}`\n\n"
         "Lütfen veri setini [Kaggle](https://www.kaggle.com/datasets/puneet6060/intel-image-classification) "
         "üzerinden indirip `data/` klasörüne çıkarın."
     )
@@ -52,7 +52,7 @@ try:
     distribution, total_images = load_data_info()
 
     # ===== GENEL İSTATİSTİKLER =====
-    st.subheader("📈 Genel İstatistikler")
+    st.subheader("Genel İstatistikler")
     metric_cols = st.columns(4)
 
     with metric_cols[0]:
@@ -68,7 +68,7 @@ try:
     st.divider()
 
     # ===== SINIF DAĞILIMI =====
-    st.subheader("📊 Sınıf Dağılımı")
+    st.subheader("Sınıf Dağılımı")
 
     fig, ax = plt.subplots(figsize=(10, 5))
     colors = sns.color_palette("viridis", len(distribution))
@@ -88,7 +88,7 @@ try:
     st.divider()
 
     # ===== ÖRNEK GÖRÜNTÜLER =====
-    st.subheader("🖼️ Sınıf Başına Örnek Görüntüler")
+    st.subheader("Sınıf Başına Örnek Görüntüler")
 
     test_transform = get_test_transforms()
     dataset = load_dataset(DATA_DIR, transform=test_transform)
@@ -106,13 +106,13 @@ try:
     st.divider()
 
     # ===== DATA AUGMENTATION ÖRNEKLERİ =====
-    st.subheader("🔄 Data Augmentation Örnekleri")
+    st.subheader("Data Augmentation Örnekleri")
     st.markdown(
         "Aynı görüntüye uygulanan farklı augmentation'lar. "
         "Her çalıştırmada rastgele farklı dönüşümler uygulanır."
     )
 
-    if st.button("🔄 Yeniden Augmentation Uygula"):
+    if st.button("Yeniden Augmentation Uygula"):
         st.rerun()
 
     # İlk sınıftan bir örnek al ve birden fazla augmentation uygula

@@ -108,14 +108,11 @@ class CustomCNN(nn.Module):
         self.features = nn.Sequential(*layers)
 
         # ===== CLASSIFIER (Sınıflandırıcı) =====
-        # Flatten sonrası tam bağlı (fully connected) katmanlar
-        # Özellik haritasının boyutunu hesapla
-        feature_map_size = input_size // (2 ** num_blocks)  # Her MaxPool boyutu yarılar
-        flatten_size = in_channels * feature_map_size * feature_map_size
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
         self.classifier = nn.Sequential(
-            nn.Flatten(),                          # (B, C, H, W) -> (B, C*H*W)
-            nn.Linear(flatten_size, 512),           # Tam bağlı katman
+            nn.Flatten(),                          # (B, C, 1, 1) -> (B, C)
+            nn.Linear(in_channels, 512),           # Tam bağlı katman
             nn.ReLU(inplace=True),
             nn.Dropout(p=dropout_rate),            # Overfitting önleme
             nn.Linear(512, 128),                    # İkinci tam bağlı katman
@@ -144,6 +141,7 @@ class CustomCNN(nn.Module):
             bu yüzden çıkışa softmax UYGULAMIYORUZ (ham logit'ler).
         """
         x = self.features(x)    # Evrişim blokları: özellik çıkarma
+        x = self.avgpool(x)     # Özellik haritalarının ortalamasını al
         x = self.classifier(x)  # Sınıflandırma katmanları
         return x
 
